@@ -42,7 +42,7 @@ namespace TKMManager
                 Console.WriteLine(exc.ToString());
             }
 
-            SqlCommand myCommand = new SqlCommand("INSERT INTO dbo.Products (ProductID, ProductName) Values (3, 'Prod3')", myConnection);
+            SqlCommand myCommand = new SqlCommand("CREATE TABLE Persons_" + DateTime.Today.ToString("yyyyMMdd") + "(PersonID int, LastName varchar(255), FirstName varchar(255), Address varchar(255), City varchar(255));", myConnection);
             myCommand.ExecuteNonQuery();
 
             try
