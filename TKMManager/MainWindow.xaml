@@ -144,7 +144,7 @@
                         <Button Grid.Column="0">Dodaj</Button>
                         <Button Grid.Column="1">Edytuj</Button>
                         <Button Grid.Column="2">Usuń</Button>
-                        <Button Grid.Column="3">Odśwież</Button>
+                        <Button Grid.Column="3" Click="GetUserList">Odśwież</Button>
 
                     </Grid>
                 </Grid>

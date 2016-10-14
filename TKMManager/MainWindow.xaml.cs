@@ -169,5 +169,27 @@ namespace TKMManager
 
             editPaymWindow.Show();
         }
+
+        private void GetUserList(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                myConnection.Open();
+                //SqlCommand myCommand = new SqlCommand("CREATE TABLE Persons_" + DateTime.Today.ToString("yyyyMMdd") + "(PersonID int, LastName varchar(255), FirstName varchar(255), Address varchar(255), City varchar(255));", myConnection);
+                SqlCommand myCommand = new SqlCommand("SELECT userID, ulogin, Name, urole FROM Users", myConnection);         
+                SqlDataAdapter sda = new SqlDataAdapter(myCommand);
+                DataTable dt = new DataTable("Users");
+                sda.Fill(dt);
+                dgUsers.ItemsSource = dt.DefaultView;
+                //myCommand.ExecuteNonQuery();
+                
+                myConnection.Close();
+
+            }
+            catch (Exception exc)
+            {
+                Console.WriteLine(exc.ToString());
+            }
+        }
     }
 }
