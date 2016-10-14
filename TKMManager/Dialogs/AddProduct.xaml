@@ -1,0 +1,21 @@
+﻿<Window x:Class="TKMManager.Dialogs.AddProduct"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Dodaj produkt" Height="143" Width="418">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>           
+        </Grid.ColumnDefinitions>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+        
+        <TextBlock Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center">Nazwa:</TextBlock>
+        <TextBox Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" x:Name="txtAddProdName">Nazwa</TextBox>
+        <Button Grid.Column="0" Grid.Row="1" x:Name="btnAddProduct" Click="btnAddProduct_Click">Dodaj</Button>
+        <Button Grid.Column="1" Grid.Row="1" x:Name="btnCancelAddProd" Click="btnCancelAddProd_Click">Anuluj</Button>
+    </Grid>
+</Window>

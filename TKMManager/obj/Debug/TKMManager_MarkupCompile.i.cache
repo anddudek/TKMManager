@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Projects\TKMManager\TKMManager\App.xaml
-11151548125
+3-381769110
 
-61573822792
+8-375915873
 121961529087
-MainWindow.xaml;
+Dialogs\AddProduct.xaml;Dialogs\EditProduct.xaml;MainWindow.xaml;
 
 False
 

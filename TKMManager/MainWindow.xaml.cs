@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Data.SqlClient;
+using System.Data;
 
 namespace TKMManager
 {
@@ -31,28 +32,60 @@ namespace TKMManager
             InitializeComponent();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void GetProductsList(object sender, RoutedEventArgs e)
         {
             try
             {
-                myConnection.Open();
-            }
-            catch (Exception exc)
-            {
-                Console.WriteLine(exc.ToString());
-            }
+                myConnection.Open();           
 
-            SqlCommand myCommand = new SqlCommand("CREATE TABLE Persons_" + DateTime.Today.ToString("yyyyMMdd") + "(PersonID int, LastName varchar(255), FirstName varchar(255), Address varchar(255), City varchar(255));", myConnection);
-            myCommand.ExecuteNonQuery();
+                //SqlCommand myCommand = new SqlCommand("CREATE TABLE Persons_" + DateTime.Today.ToString("yyyyMMdd") + "(PersonID int, LastName varchar(255), FirstName varchar(255), Address varchar(255), City varchar(255));", myConnection);
+                SqlCommand myCommand = new SqlCommand("SELECT * FROM Products", myConnection);
+                SqlDataAdapter sda = new SqlDataAdapter(myCommand);
+                DataTable dt = new DataTable("Products");
+                sda.Fill(dt);
+                dgProducts.ItemsSource = dt.DefaultView;
+                //myCommand.ExecuteNonQuery();
 
-            try
-            {
                 myConnection.Close();
+
             }
             catch (Exception exc)
             {
                 Console.WriteLine(exc.ToString());
             }
         }
+
+        private void AddNewProduct(object sender, RoutedEventArgs e)
+        {
+            Dialogs.AddProduct addNewProduct = new Dialogs.AddProduct();
+            addNewProduct.Show();
+        }
+
+        private void EditProduct(object sender, RoutedEventArgs e)
+        {
+            DataRowView row = (DataRowView)dgProducts.SelectedItem;
+            Dialogs.EditProduct editProdWindow = new Dialogs.EditProduct();
+            editProdWindow.txtProdID.Text = row["ProductID"].ToString();
+            editProdWindow.txtEditProdName.Text = row["ProductName"].ToString();
+            editProdWindow.txtEditProdAmount.Text = row["WarehouseAmount"].ToString();
+            editProdWindow.Show();
+
+            //Console.WriteLine(row["ProductID"].ToString());
+        }
+
+        private void DeleteProduct(object sender, RoutedEventArgs e)
+        {
+            DataRowView row = (DataRowView)dgProducts.SelectedItem;
+
+            myConnection.Open();
+
+            //SqlCommand myCommand = new SqlCommand("CREATE TABLE Persons_" + DateTime.Today.ToString("yyyyMMdd") + "(PersonID int, LastName varchar(255), FirstName varchar(255), Address varchar(255), City varchar(255));", myConnection);
+            SqlCommand myCommand = new SqlCommand("DELETE FROM Products WHERE ProductID=@prodID", myConnection);
+            myCommand.Parameters.AddWithValue("@prodID", int.Parse(row["ProductID"].ToString()));
+            myCommand.ExecuteNonQuery();
+
+            myConnection.Close();
+        }
+
     }
 }

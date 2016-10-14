@@ -31,7 +31,7 @@
                         <RowDefinition Height="1*" />
                     </Grid.RowDefinitions>
 
-                    <DataGrid Grid.Row="0" x:Name="dgProducts"/>
+                    <DataGrid Grid.Row="0" x:Name="dgProducts" IsReadOnly="True"/>
 
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
@@ -41,10 +41,10 @@
                             <ColumnDefinition Width="1*" />
                         </Grid.ColumnDefinitions>
 
-                        <Button Grid.Column="0">Dodaj</Button>
-                        <Button Grid.Column="1">Edytuj</Button>
-                        <Button Grid.Column="2">Usuń</Button>
-                        <Button Grid.Column="3">Odśwież</Button>
+                        <Button Grid.Column="0" Click="AddNewProduct">Dodaj</Button>
+                        <Button Grid.Column="1" Click="EditProduct">Edytuj</Button>
+                        <Button Grid.Column="2" Click="DeleteProduct">Usuń</Button>
+                        <Button Grid.Column="3" Click="GetProductsList">Odśwież</Button>
 
                     </Grid>                    
                 </Grid>
