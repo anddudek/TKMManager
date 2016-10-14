@@ -53,7 +53,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Dialogs\AddPayment.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Dialogs\AddProduct.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\EditPayment.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -69,8 +77,14 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Dialogs\AddPayment.xaml.cs">
+      <DependentUpon>AddPayment.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\AddProduct.xaml.cs">
       <DependentUpon>AddProduct.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\EditPayment.xaml.cs">
+      <DependentUpon>EditPayment.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\EditProduct.xaml.cs">
       <DependentUpon>EditProduct.xaml</DependentUpon>

@@ -87,5 +87,87 @@ namespace TKMManager
             myConnection.Close();
         }
 
+        private string GetMonthByInt(int month)
+        {
+            switch (month)
+            {
+                case 1:
+                    return "Styczeń";
+                case 2:
+                    return "Luty";
+                case 3: 
+                    return "Marzec";
+                case 4:
+                    return "Kwiecień";
+                case 5:
+                    return "Maj";
+                case 6:
+                    return "Czerwiec";
+                case 7:
+                    return "Lipiec";
+                case 8:
+                    return "Sierpień";
+                case 9:
+                    return "Wrzesień";
+                case 10:
+                    return "Październik";
+                case 11:
+                    return "Listopad";
+                case 12:
+                    return "Grudzień";
+                default:
+                    return "BłędnyMiesiąc";
+            }
+        }
+
+        private void GetPaymentsList(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                myConnection.Open();
+                //SqlCommand myCommand = new SqlCommand("CREATE TABLE Persons_" + DateTime.Today.ToString("yyyyMMdd") + "(PersonID int, LastName varchar(255), FirstName varchar(255), Address varchar(255), City varchar(255));", myConnection);
+                SqlCommand myCommand = new SqlCommand("SELECT * FROM Payments WHERE DATEPART(month, Registered) = @month", myConnection);
+                myCommand.Parameters.AddWithValue("@month", 10);
+                SqlDataAdapter sda = new SqlDataAdapter(myCommand);
+                DataTable dt = new DataTable("Payments");
+                sda.Fill(dt);
+                dgPayments.ItemsSource = dt.DefaultView;
+                //myCommand.ExecuteNonQuery();
+
+                SqlCommand CurrMonth = new SqlCommand("Select MONTH(getdate())", myConnection);
+                int currMonthIndex = int.Parse(CurrMonth.ExecuteScalar().ToString());
+
+                
+                txtCurrMonth.Text = GetMonthByInt(currMonthIndex);
+
+                SqlCommand Balance = new SqlCommand("Select SUM(Cost) from dbo.Payments Where MONTH(Registered)=@month", myConnection);
+                Balance.Parameters.AddWithValue("@month", currMonthIndex);
+                txtPaymentsSaldo.Text = Balance.ExecuteScalar().ToString();
+
+                myConnection.Close();
+
+            }
+            catch (Exception exc)
+            {
+                Console.WriteLine(exc.ToString());
+            }
+        }
+
+        private void AddPayment(object sender, RoutedEventArgs e)
+        {
+            Dialogs.AddPayment addNewPayment = new Dialogs.AddPayment();
+            addNewPayment.Show();
+        }
+
+        private void EditPayment(object sender, RoutedEventArgs e)
+        {
+            DataRowView row = (DataRowView)dgPayments.SelectedItem;
+            Dialogs.EditPayment editPaymWindow = new Dialogs.EditPayment();
+            editPaymWindow.txtPaymID.Text = row["PaymentID"].ToString();
+            editPaymWindow.txtPaymDate.Text = row["Registered"].ToString();
+            editPaymWindow.txtPaymCost.Text = row["Cost"].ToString();
+
+            editPaymWindow.Show();
+        }
     }
 }

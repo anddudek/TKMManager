@@ -1,0 +1,24 @@
+﻿<Window x:Class="TKMManager.Dialogs.AddPayment"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Dodaj wpłatę / koszt" Height="143" Width="418">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Center">Wysokość [zł]</TextBlock>
+        <TextBox Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" x:Name="txtPaymCost">0</TextBox>
+        <TextBlock Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center">Komentarz:</TextBlock>
+        <TextBox Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" x:Name="txtPaymComm">Com</TextBox>        
+        <Button Grid.Column="0" Grid.Row="3" x:Name="btnAddPaym" Click="btnAddPaym_Click">Dodaj</Button>
+        <Button Grid.Column="1" Grid.Row="3" x:Name="btnCancelAddPaym" Click="btnCancelAddPaym_Click">Anuluj</Button>
+    </Grid>
+</Window>
+
