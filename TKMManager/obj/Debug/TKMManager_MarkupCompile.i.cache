@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Projects\TKMManager\TKMManager\App.xaml
-6-505969824
+81644498224
 
-11948322110
+13475240024
 121961529087
-Dialogs\AddPayment.xaml;Dialogs\AddProduct.xaml;Dialogs\EditPayment.xaml;Dialogs\EditProduct.xaml;Dialogs\LoginWindow.xaml;MainWindow.xaml;
+Dialogs\EditSupplier.xaml;Dialogs\AddSupplier.xaml;Dialogs\AddPayment.xaml;Dialogs\AddProduct.xaml;Dialogs\EditPayment.xaml;Dialogs\EditProduct.xaml;Dialogs\LoginWindow.xaml;MainWindow.xaml;
 
 False
 

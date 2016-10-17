@@ -36,15 +36,27 @@ namespace TKMManager.Dialogs
                             "connection timeout=30");
 
                 myConnection.Open();
-                //SqlCommand myCommand = new SqlCommand("CREATE TABLE Persons_" + DateTime.Today.ToString("yyyyMMdd") + "(PersonID int, LastName varchar(255), FirstName varchar(255), Address varchar(255), City varchar(255));", myConnection);
-                SqlCommand myCommand = new SqlCommand("SELECT userID, ulogin, Name, urole FROM Users", myConnection);
-                SqlDataAdapter sda = new SqlDataAdapter(myCommand);
-                DataTable dt = new DataTable("Users");
-                sda.Fill(dt);
-                dgUsers.ItemsSource = dt.DefaultView;
-                //myCommand.ExecuteNonQuery();
+
+                SqlCommand login = new SqlCommand("SELECT COUNT(*) FROM dbo.Users WHERE UPPER(ulogin)=UPPER(@login) AND pw=@pw", myConnection);
+                login.Parameters.AddWithValue("@login", txtLogin.Text);
+                login.Parameters.AddWithValue("@pw", pwPassword.Password);
+                var loginSucceeded = login.ExecuteScalar().ToString();
 
                 myConnection.Close();
+
+
+                if (loginSucceeded == "1")
+                {
+                    MainWindow mainWndw = new MainWindow();
+                    mainWndw.Show();
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Błędny login lub hasło");
+                }
+
+                
 
             }
             catch (Exception exc)

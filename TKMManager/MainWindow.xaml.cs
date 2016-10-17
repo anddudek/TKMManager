@@ -191,5 +191,58 @@ namespace TKMManager
                 Console.WriteLine(exc.ToString());
             }
         }
+
+        private void GetSuppliersList(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                myConnection.Open();
+                //SqlCommand myCommand = new SqlCommand("CREATE TABLE Persons_" + DateTime.Today.ToString("yyyyMMdd") + "(PersonID int, LastName varchar(255), FirstName varchar(255), Address varchar(255), City varchar(255));", myConnection);
+                SqlCommand myCommand = new SqlCommand("SELECT * FROM Suppliers", myConnection);
+                SqlDataAdapter sda = new SqlDataAdapter(myCommand);
+                DataTable dt = new DataTable("Suppliers");
+                sda.Fill(dt);
+                dgSupliers.ItemsSource = dt.DefaultView;
+                //myCommand.ExecuteNonQuery();
+
+                myConnection.Close();
+
+            }
+            catch (Exception exc)
+            {
+                Console.WriteLine(exc.ToString());
+            }
+        }
+
+        private void AddSupplier(object sender, RoutedEventArgs e)
+        {
+            Dialogs.AddSupplier addNewSupp = new Dialogs.AddSupplier();
+            addNewSupp.Show();
+        }
+
+        private void EditSupplier(object sender, RoutedEventArgs e)
+        {
+            DataRowView row = (DataRowView)dgSupliers.SelectedItem;
+            Dialogs.EditSupplier editSuppWindow = new Dialogs.EditSupplier();
+            editSuppWindow.txtSuppID.Text = row["SuppID"].ToString();
+            editSuppWindow.txtSuppName.Text = row["Name"].ToString();
+            editSuppWindow.txtSuppAddr.Text = row["SAddress"].ToString();
+
+            editSuppWindow.Show();
+        }
+
+        private void DelSupplier(object sender, RoutedEventArgs e)
+        {
+            DataRowView row = (DataRowView)dgSupliers.SelectedItem;
+
+            myConnection.Open();
+
+            //SqlCommand myCommand = new SqlCommand("CREATE TABLE Persons_" + DateTime.Today.ToString("yyyyMMdd") + "(PersonID int, LastName varchar(255), FirstName varchar(255), Address varchar(255), City varchar(255));", myConnection);
+            SqlCommand myCommand = new SqlCommand("DELETE FROM Suppliers WHERE suppID=@sID", myConnection);
+            myCommand.Parameters.AddWithValue("@sID", int.Parse(row["suppID"].ToString()));
+            myCommand.ExecuteNonQuery();
+
+            myConnection.Close();
+        }
     }
 }
