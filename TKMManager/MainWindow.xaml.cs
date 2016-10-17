@@ -269,7 +269,8 @@ namespace TKMManager
 
         private void AddSupply(object sender, RoutedEventArgs e)
         {
-
+            Dialogs.AddSupply addSupplyWindow = new Dialogs.AddSupply();
+            addSupplyWindow.Show();
         }
 
         private void ShowSupply(object sender, RoutedEventArgs e)
