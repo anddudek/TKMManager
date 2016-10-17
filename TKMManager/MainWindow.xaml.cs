@@ -244,5 +244,42 @@ namespace TKMManager
 
             myConnection.Close();
         }
+
+        private void GetSuppliesList(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                myConnection.Open();
+                //SqlCommand myCommand = new SqlCommand("CREATE TABLE Persons_" + DateTime.Today.ToString("yyyyMMdd") + "(PersonID int, LastName varchar(255), FirstName varchar(255), Address varchar(255), City varchar(255));", myConnection);
+                SqlCommand myCommand = new SqlCommand("SELECT * FROM Supplies", myConnection);
+                SqlDataAdapter sda = new SqlDataAdapter(myCommand);
+                DataTable dt = new DataTable("Suppliers");
+                sda.Fill(dt);
+                dgSuplies.ItemsSource = dt.DefaultView;
+                //myCommand.ExecuteNonQuery();
+
+                myConnection.Close();
+
+            }
+            catch (Exception exc)
+            {
+                Console.WriteLine(exc.ToString());
+            }
+        }
+
+        private void AddSupply(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ShowSupply(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void DelSupply(object sender, RoutedEventArgs e)
+        {
+            //Not Implemented
+        }
     }
 }
