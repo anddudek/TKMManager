@@ -1,0 +1,74 @@
+﻿<Window x:Class="TKMManager.Dialogs.AddOrder"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Dodaj zamówienie" Height="500" Width="400">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="4*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="5*" />
+            <RowDefinition Height="2*" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Center">Wybierz zamawiającego:</TextBlock>
+            <ComboBox Grid.Column="1" Grid.Row="0" x:Name="cmbOrderer"/>
+            <TextBlock Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center">Wybierz dostawcę:</TextBlock>
+            <ComboBox Grid.Column="1" Grid.Row="1" x:Name="cmbMaker"/>
+            <TextBlock Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center">Wybierz produkt:</TextBlock>
+            <ComboBox Grid.Column="1" Grid.Row="2" x:Name="cmbProducts"></ComboBox>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="2*" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Ilość:</TextBlock>
+            <TextBox Grid.Column="1" VerticalAlignment="Center" x:Name="orderAmount"></TextBox>
+            <Button Grid.Column="4" Click="orderAddOrderToList">Dodaj do listy</Button>
+        </Grid>
+
+        <DataGrid Grid.Row="2" x:Name="orderList" AutoGenerateColumns="False" ItemsSource="{Binding ProductsBinding}" >
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Produkt" IsReadOnly="True" Binding="{Binding Path=ProductName}" Width="250"/>
+                <DataGridTextColumn Header="Ilość" IsReadOnly="True" Binding="{Binding Path=Amount}" Width="100"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Grid Grid.Row="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="2" Click="orderEditOrderFromList">Edytuj</Button>
+            <Button Grid.Column="3" Click="orderDelOrderFromList">Usuń</Button>
+            <TextBlock Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center">Komentarz:</TextBlock>
+            <TextBox Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Name="txtComment" Grid.ColumnSpan="2">x</TextBox>
+            <Button Grid.Column="3" Grid.Row="1" Click="orderSaveOrder">Zapisz</Button>
+        </Grid>
+    </Grid>
+
+
+</Window>

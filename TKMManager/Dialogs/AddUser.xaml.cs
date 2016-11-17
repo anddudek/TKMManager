@@ -18,14 +18,14 @@ namespace TKMManager.Dialogs
     /// <summary>
     /// Interaction logic for LoginWindow.xaml
     /// </summary>
-    public partial class LoginWindow : Window
+    public partial class AddUser : Window
     {
-        public LoginWindow()
+        public AddUser()
         {
             InitializeComponent();
         }
 
-        private void Login(object sender, RoutedEventArgs e)
+        private void AddNewUser(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -37,29 +37,15 @@ namespace TKMManager.Dialogs
 
                 myConnection.Open();
 
-                SqlCommand login = new SqlCommand("SELECT COUNT(*) FROM dbo.Users WHERE UPPER(ulogin)=UPPER(@login) AND pw=@pw", myConnection);
-                login.Parameters.AddWithValue("@login", txtLogin.Text);
-                login.Parameters.AddWithValue("@pw", pwPassword.Password);
-                var loginSucceeded = login.ExecuteScalar().ToString();
+                SqlCommand myCommand = new SqlCommand("INSERT INTO Users ([ulogin], [pw], [Name], [urole]) VALUES (@login, @pw, @name, @role)", myConnection);
+                myCommand.Parameters.AddWithValue("@login", txtLogin.Text);
+                myCommand.Parameters.AddWithValue("@pw", txtPassword.Text);
+                myCommand.Parameters.AddWithValue("@name", txtName.Text);
+                myCommand.Parameters.AddWithValue("@role", txtRole.Text);
+                myCommand.ExecuteNonQuery();
 
                 myConnection.Close();
-
-
-                if (loginSucceeded == "1")
-                {
-                    MainWindow mainWndw = new MainWindow();
-
-                    mainWndw.populateTables();
-                    mainWndw.updateFirstPage();
-                    this.Close();
-                    mainWndw.Show();
-                }
-                else
-                {
-                    MessageBox.Show("Błędny login lub hasło");
-                }
-
-                
+                this.Close();
 
             }
             catch (Exception exc)
@@ -68,7 +54,7 @@ namespace TKMManager.Dialogs
             }
         }
 
-        private void LoginCancel(object sender, RoutedEventArgs e)
+        private void AddCancel(object sender, RoutedEventArgs e)
         {
             this.Close();
         }

@@ -21,7 +21,12 @@
                     <TextBlock Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" TextAlignment="Right">Ilość zamówień:</TextBlock>
                     <TextBlock Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" TextAlignment="Right">Ilość dostaw:</TextBlock>
                     <TextBlock Grid.Column="0" Grid.Row="3" VerticalAlignment="Center" TextAlignment="Right">Bilans:</TextBlock>
-                    
+
+                    <TextBlock x:Name="txtMonth" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" TextAlignment="Center">x</TextBlock>
+                    <TextBlock x:Name="txtOrdersCount" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" TextAlignment="Center">x</TextBlock>
+                    <TextBlock x:Name="txtSuppliesCount" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" TextAlignment="Center">x</TextBlock>
+                    <TextBlock x:Name="txtSaldo" Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" TextAlignment="Center">x</TextBlock>
+
                 </Grid>
             </TabItem>
             <TabItem Header="Produkty">
@@ -66,10 +71,10 @@
                             <ColumnDefinition Width="1*" />
                         </Grid.ColumnDefinitions>
 
-                        <Button Grid.Column="0">Dodaj</Button>
-                        <Button Grid.Column="1">Podgląd</Button>
+                        <Button Grid.Column="0" Click="AddOrder">Dodaj</Button>
+                        <Button Grid.Column="1" Click="ShowOrder">Podgląd</Button>
                         <Button Grid.Column="2" Visibility="Hidden">Usuń</Button>
-                        <Button Grid.Column="3">Odśwież</Button>
+                        <Button Grid.Column="3" Click="GetOrdersList">Odśwież</Button>
 
                     </Grid>
                 </Grid>
@@ -141,9 +146,9 @@
                             <ColumnDefinition Width="1*" />
                         </Grid.ColumnDefinitions>
 
-                        <Button Grid.Column="0">Dodaj</Button>
-                        <Button Grid.Column="1">Edytuj</Button>
-                        <Button Grid.Column="2">Usuń</Button>
+                        <Button Grid.Column="0" Click="AddNewUser">Dodaj</Button>
+                        <Button Grid.Column="1" Click="EditUser">Zresetuj hasło</Button>
+                        <Button Grid.Column="2" Click="DeleteUser">Usuń</Button>
                         <Button Grid.Column="3" Click="GetUserList">Odśwież</Button>
 
                     </Grid>
@@ -182,7 +187,7 @@
 
                         <Button Grid.Column="0" Click="AddPayment">Dodaj</Button>
                         <Button Grid.Column="1" Click="EditPayment">Edytuj</Button>
-                        <Button Grid.Column="2" Visibility="Hidden">Usuń</Button>
+                        <Button x:Name="btnChangeSel" Grid.Column="2" Click="ChangeSelection">Wszystkie</Button>
                         <Button Grid.Column="3" Click="GetPaymentsList">Odśwież</Button>
 
                     </Grid>

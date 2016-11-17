@@ -18,12 +18,12 @@ namespace TKMManager.Dialogs
     /// <summary>
     /// Interaction logic for AddSupply.xaml
     /// </summary>
-    public partial class AddSupply : Window
+    public partial class AddOrder : Window
     {
         List<string> productsList = new List<string>();
         List<string> suppliersList = new List<string>();
 
-        public AddSupply()
+        public AddOrder()
         {
             InitializeComponent();
             PopulateComboBoxes();
@@ -51,15 +51,16 @@ namespace TKMManager.Dialogs
                     cmbProducts.Items.Add(row["ProductName"].ToString());
                 }
 
-                myCommand = new SqlCommand("SELECT * FROM Suppliers", myConnection);
+                myCommand = new SqlCommand("SELECT * FROM Users", myConnection);
                 sda = new SqlDataAdapter(myCommand);
                 ds = new DataSet();
-                sda.Fill(ds, "Suppliers");
-                cmbSuppliers.Items.Clear();
-                foreach (DataRow row in ds.Tables["Suppliers"].Rows)
+                sda.Fill(ds, "Orderers");
+                cmbOrderer.Items.Clear();
+                foreach (DataRow row in ds.Tables["Orderers"].Rows)
                 {
                     //productsList.Add(row["ProductName"].ToString());
-                    cmbSuppliers.Items.Add(row["Name"].ToString());
+                    cmbOrderer.Items.Add(row["Name"].ToString());
+                    cmbMaker.Items.Add(row["Name"].ToString());
                 }
 
                 myConnection.Close();
@@ -72,42 +73,27 @@ namespace TKMManager.Dialogs
             }
         }
 
-        private void supplyAddSupplier(object sender, RoutedEventArgs e)
+        private void orderAddOrderToList(object sender, RoutedEventArgs e)
         {
-            Dialogs.AddSupplier windowAddSupply = new AddSupplier();
-            windowAddSupply.Show();
+            var dataPoint = new OrderProduct(cmbProducts.SelectedItem.ToString(), orderAmount.Text);
+            orderList.Items.Add(dataPoint);
         }
 
-        private void supplyAddProduct(object sender, RoutedEventArgs e)
+        private void orderEditOrderFromList(object sender, RoutedEventArgs e)
         {
-            AddProduct windowAddProduct = new AddProduct();
-            windowAddProduct.Show();
+            OrderProduct selected = (OrderProduct)orderList.SelectedItem;
+            OrderProduct sp = new OrderProduct(cmbProducts.SelectedItem.ToString(), orderAmount.Text);
+            int index = orderList.SelectedIndex;
+            orderList.Items.RemoveAt(index);
+            orderList.Items.Insert(index, sp);
         }
 
-        private void supplyAddSupplyToList(object sender, RoutedEventArgs e)
+        private void orderDelOrderFromList(object sender, RoutedEventArgs e)
         {
-            var dataPoint = new SupplyProduct(cmbProducts.SelectedItem.ToString(), supplyAmount.Text, supplyCost.Text);
-            supplyList.Items.Add(dataPoint);
-            txtSum.Text = CalculateSum().ToString();
+            orderList.Items.RemoveAt(orderList.SelectedIndex);
         }
 
-        private void supplyEditSupplyFromList(object sender, RoutedEventArgs e)
-        {
-            SupplyProduct selected = (SupplyProduct)supplyList.SelectedItem;
-            SupplyProduct sp = new SupplyProduct(cmbProducts.SelectedItem.ToString(), supplyAmount.Text, supplyCost.Text);
-            int index = supplyList.SelectedIndex;
-            supplyList.Items.RemoveAt(index);
-            supplyList.Items.Insert(index, sp);
-            txtSum.Text = CalculateSum().ToString();
-        }
-
-        private void supplyDelSupplyFromList(object sender, RoutedEventArgs e)
-        {
-            supplyList.Items.RemoveAt(supplyList.SelectedIndex);
-            txtSum.Text = CalculateSum().ToString();
-        }
-
-        private void supplySaveSupply(object sender, RoutedEventArgs e)
+        private void orderSaveOrder(object sender, RoutedEventArgs e)
         {
             SqlConnection myConnection = new SqlConnection("user id=tkmmanagerdb;" +
                                        "password=Oz781It_2!30;server=mssql3.gear.host;" +
@@ -118,41 +104,30 @@ namespace TKMManager.Dialogs
             {
                 myConnection.Open();
 
-                SqlCommand myCommand = new SqlCommand("SELECT COUNT(*) FROM Supplies", myConnection);
-                int supplyID = (int)myCommand.ExecuteScalar()+1;
+                SqlCommand myCommand = new SqlCommand("SELECT COUNT(*) FROM Orders", myConnection);
+                int orderID = (int)myCommand.ExecuteScalar()+1;
                 DateTime curr = DateTime.Now;
-                myCommand = new SqlCommand("INSERT INTO Payments (Registered, Cost, Comment) VALUES (@date, @cost, @comment)", myConnection);
-                myCommand.Parameters.AddWithValue("@date", curr);
-                myCommand.Parameters.AddWithValue("@cost", -CalculateSum());
-                myCommand.Parameters.AddWithValue("@comment", "Dostawa nr " + (supplyID).ToString());
-                myCommand.ExecuteNonQuery();
 
-                myCommand = new SqlCommand("SELECT suppID FROM Suppliers WHERE Name=@name", myConnection);
-                myCommand.Parameters.AddWithValue("@name", cmbSuppliers.SelectedItem.ToString());
-                int supplierID = (int)myCommand.ExecuteScalar();
-
-                myCommand = new SqlCommand("INSERT INTO Supplies (supplyDate, supplierID, supplyCost, supplyComment) VALUES (@date, @sid, @cost, @comm)", myConnection);
+                myCommand = new SqlCommand("INSERT INTO Orders (orderBy, doneBy, orderDate, comment) VALUES (@oBy, @dBy, @date, @comm)", myConnection);
                 myCommand.Parameters.AddWithValue("@date", curr);
-                myCommand.Parameters.AddWithValue("@cost", -CalculateSum());
-                myCommand.Parameters.AddWithValue("@sid", supplierID);
+                myCommand.Parameters.AddWithValue("@oBy", cmbOrderer.SelectedItem.ToString());
+                myCommand.Parameters.AddWithValue("@dBy", cmbMaker.SelectedItem.ToString());
                 myCommand.Parameters.AddWithValue("@comm", txtComment.Text);
                 myCommand.ExecuteNonQuery();
 
-                myCommand = new SqlCommand("CREATE TABLE [dbo].[Supply_" + supplyID.ToString() + "] (ProductID int not null, Amount int not null, Cost float not null)", myConnection);
-                //myCommand.Parameters.Add("@table", "Supply_" + supplyID.ToString());
+                myCommand = new SqlCommand("CREATE TABLE [dbo].[Order_" + orderID.ToString() + "] (ProductID int not null, Amount int not null)", myConnection);
                 myCommand.ExecuteNonQuery();
                 int pid = 0;
 
-                foreach (SupplyProduct row in supplyList.Items)
+                foreach (OrderProduct row in orderList.Items)
                 {
                     myCommand = new SqlCommand("SELECT ProductID FROM Products WHERE ProductName=@name", myConnection);
                     myCommand.Parameters.AddWithValue("@name", row.ProductName);
                     pid = (int)myCommand.ExecuteScalar();
-                    myCommand = new SqlCommand("INSERT INTO [dbo].[Supply_" + supplyID.ToString() + "] (ProductID, Amount, Cost) VALUES (@pid, @amount, @cost)", myConnection);
-                    myCommand.Parameters.AddWithValue("@table", "Supply_" + supplyID.ToString());
+                    myCommand = new SqlCommand("INSERT INTO [dbo].[Order_" + orderID.ToString() + "] (ProductID, Amount) VALUES (@pid, @amount)", myConnection);
+                    
                     myCommand.Parameters.AddWithValue("@pid", pid);
                     myCommand.Parameters.AddWithValue("@amount", int.Parse(row.Amount));
-                    myCommand.Parameters.AddWithValue("@cost", double.Parse(row.Cost.Replace(',', '.')));
                     myCommand.ExecuteNonQuery();
 
                     myCommand = new SqlCommand("update Products Set LastOrder=@date, WarehouseAmount=WarehouseAmount-@amount Where ProductID = @pid", myConnection);
@@ -160,13 +135,16 @@ namespace TKMManager.Dialogs
                     myCommand.Parameters.AddWithValue("@amount", int.Parse(row.Amount));
                     myCommand.Parameters.AddWithValue("@pid", pid);
                     myCommand.ExecuteNonQuery();
+
                 }
                 //
                 //TRZEBA DODAC UPDATE W PRODUKTACH ( DATA ZAMOWIENIA I STAN)
                 //
                 myConnection.Close();
-
+                
                 this.Close();
+
+
             }
             catch (Exception exc)
             {
@@ -178,27 +156,16 @@ namespace TKMManager.Dialogs
         {
             PopulateComboBoxes();
         }
-        private double CalculateSum()
-        {
-            double sum = 0;
-            foreach (SupplyProduct row in supplyList.Items)
-            {
-                sum += double.Parse(row.Cost.Replace(',', '.'));
-            }
-            return sum;
-        }
 
-        public class SupplyProduct
+        public class OrderProduct
         {
             public string ProductName {get; set; }
             public string Amount { get; set; }
-            public string Cost { get; set; }
 
-            public SupplyProduct(string _name, string _amnt, string _cost)
+            public OrderProduct(string _name, string _amnt)
             {
                 ProductName = _name;
                 Amount = _amnt;
-                Cost = _cost;
             }
         }
     }
